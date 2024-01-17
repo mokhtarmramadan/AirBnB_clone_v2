@@ -50,13 +50,10 @@ class FileStorage:
 
     def reload(self):
         """ reform the Json to an object again """
-        try:
-            with open(self.__file_path, 'r') as f:
-                jo = json.load(f)
-            for key in jo:
-                self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except:
-            pass
+        with open(self.__file_path, 'r') as f:
+            jo = json.load(f)
+            for key, value in jo.items():
+                self.__objects[key] = FileStorage.classes[jo[key]["__class__"]](**jo[key])
 
     def delete(self, obj=None):
         """deletes the object dictionary """
