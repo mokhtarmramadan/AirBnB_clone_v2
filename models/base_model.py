@@ -11,10 +11,20 @@ from sqlalchemy.ext.declarative import declarative_base
 import uuid
 
 
+if models.storage_t == "db":
+    Base = declarative_base()
+else:
+    Base = object
+
+
 class BaseModel:
     """The BaseModel class from which future classes will be inhurit from """
 
-
+    if models.storage_t == "db":
+        id = Column(String(60), primary_key=True)
+        created_at = Column(DateTime, default=datetime.utcnow)
+        updated_at = Column(DateTime, default=datetime.utcnow)
+    
     def __init__(self, *args, **kwargs):
         """ base model """
         if kwargs:
@@ -60,4 +70,8 @@ class BaseModel:
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
         return new_dict
+    
+    def delete(self):
+        """ deletes instance from the storage """
+        models.storage.delete(self)
 
