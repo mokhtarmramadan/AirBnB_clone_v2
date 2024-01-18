@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
+""" State  """
 import models
 from models.base_model import BaseModel, Base
 from os import getenv
@@ -17,5 +17,5 @@ class Amenity(BaseModel, Base):
         name = ""
 
     def __init__(self, *args, **kwargs):
-        """initializes Amenity"""
+        """make initializion Amenity"""
         super().__init__(*args, **kwargs)
