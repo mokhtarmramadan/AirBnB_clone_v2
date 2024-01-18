@@ -1,13 +1,14 @@
 #!/usr/bin/python
 """ Place Class"""
 import models
-from models.review import  Review
-from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+
+# Import the Review class
+from models.review import Review
 
 if models.storage_t == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
@@ -19,7 +20,6 @@ if models.storage_t == 'db':
                                  ForeignKey('amenities.id', onupdate='CASCADE',
                                             ondelete='CASCADE'),
                                  primary_key=True))
-
 
 class Place(BaseModel, Base):
     """ A Place """
@@ -35,10 +35,7 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        reviews = relationship("Review", backref="place")
-        amenities = relationship("Amenity", secondary="place_amenity",
-                                 backref="place_amenities",
-                                 viewonly=False)
+        
     else:
         city_id = ""
         user_id = ""
@@ -51,6 +48,13 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+    # Move the relationship definition outside the class body
+    if models.storage_t == 'db':
+        reviews = relationship("Review", backref="place")
+        amenities = relationship("Amenity", secondary="place_amenity",
+                                 backref="Place_amenities",
+                                 viewonly=False)
 
     def __init__(self, *args, **kwargs):
         """initialize a Place"""
