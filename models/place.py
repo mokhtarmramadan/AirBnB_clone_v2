@@ -53,7 +53,7 @@ class Place(BaseModel, Base):
     if models.storage_t == 'db':
         reviews = relationship("Review", backref="place")
         amenities = relationship("Amenity", secondary="place_amenity",
-                                 backref="Place_amenities",
+                                 backref="place_amenities",
                                  viewonly=False)
 
     def __init__(self, *args, **kwargs):
