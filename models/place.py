@@ -9,7 +9,6 @@ from sqlalchemy.orm import relationship
 
 # Import the Review class
 from models.review import Review
-
 if models.storage_t == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60),
@@ -20,7 +19,6 @@ if models.storage_t == 'db':
                                  ForeignKey('amenities.id', onupdate='CASCADE',
                                             ondelete='CASCADE'),
                                  primary_key=True))
-
 class Place(BaseModel, Base):
     """ A Place """
     if models.storage_t == 'db':
@@ -50,11 +48,13 @@ class Place(BaseModel, Base):
         amenity_ids = []
 
     # Move the relationship definition outside the class body
+
     if models.storage_t == 'db':
         reviews = relationship("Review", backref="place")
         amenities = relationship("Amenity", secondary="place_amenity",
                                  backref="place_amenities",
                                  viewonly=False)
+    
 
     def __init__(self, *args, **kwargs):
         """initialize a Place"""
@@ -71,7 +71,7 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     reviews.append(review)
             return reviews
-
+    
         @property
         def amenities(self):
             """getter attribute to get the Amenity related to a place """
